@@ -1,0 +1,26 @@
+app:
+  version: 1.0.0
+camel:
+  servlet:
+    mapping:
+      enabled: true
+      context-path: /api/*
+
+api:
+  title: "Camel example"
+  description: "Camel example application"
+  access:
+    control:
+      allow:
+        origin: "*"
+spring:
+  main:
+    web-application-type: SERVLET
+
+server:
+  port: ${APP_SERVER_CONNECTION_PORT:8080}
+
+
+
+
+
