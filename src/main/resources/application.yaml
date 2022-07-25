@@ -5,6 +5,9 @@ camel:
     mapping:
       enabled: true
       context-path: /api/*
+telegram:
+  authtoken: ***entertokenhere***
+  chatid: ***
 
 api:
   title: "Camel example"

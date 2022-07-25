@@ -18,19 +18,36 @@ public class RestRoute extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        rest().tag("info")
+        rest()
                 .get("/info")
+                .tag("info")
+                .description("Получениие информации о приложении")
                 .bindingMode(RestBindingMode.json)
                 .consumes(MediaType.APPLICATION_JSON_VALUE)
                 .produces(MediaType.APPLICATION_JSON_VALUE)
                 .responseMessage()
                 .code(HttpStatus.OK.value()).responseModel(Info.class)
                 .endResponseMessage()
-                .to("direct:info");
+                .to("direct:info")
+
+                .post("/pushTg")
+                .tag("pushTg")
+                .description("Отправка сообщения в telegram")
+                .type(String.class)
+                .to("direct:push");
+
+                from("direct:push")
+                    .convertBodyTo(String.class)
+                    .to("telegram:bots?authorizationToken=" + "{{telegram.authtoken}}" +
+                        "&chatId=" + "{{telegram.chatid}}");
+
 
         from("direct:info")
                 .setHeader(HttpHeaders.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_VALUE))
                 .setBody(constant(new Info(applicationVersion)))
+                .marshal().json(true)
                 .convertBodyTo(String.class);
+
+
     }
 }
